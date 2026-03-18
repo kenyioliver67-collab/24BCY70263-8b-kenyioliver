@@ -22,7 +22,7 @@ app.use(loggerMiddleware);
 // Routes
 app.use("/users", authRoutes);
 
-// Base route
+// Base route (API Welcome Page)
 app.get("/", (req, res) => {
     res.send(`
     <html>
@@ -72,23 +72,43 @@ app.get("/", (req, res) => {
 
             <div class="endpoint">
                 <span class="method">POST</span> /users/register
+                <br>Register a new user
             </div>
 
             <div class="endpoint">
                 <span class="method">POST</span> /users/login
+                <br>Login and receive JWT token
             </div>
 
             <div class="endpoint">
                 <span class="method">GET</span> /users/me
+                <br>Get current logged-in user (Protected)
             </div>
+
+            <h2>Testing</h2>
+
+            <p>
+            Use Postman or any API client to test endpoints.
+            <br>
+            Base URL: <b>http://localhost:3000</b>
+            </p>
         </div>
     </body>
     </html>
     `);
 });
 
-// Error handler
+// Error handler (must be last)
 app.use(errorMiddleware);
 
-// ✅ THIS LINE IS REQUIRED FOR VERCEL
+// Local server (only for development)
+if (process.env.NODE_ENV !== "production") {
+    const PORT = process.env.PORT || 3000;
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+// Export app for Vercel
 module.exports = app;
